@@ -29,7 +29,6 @@ public final class NotificationMail {
         if (o == this) return true;
         if (!(o instanceof NotificationMail that)) return false;
         return Objects.equals(this.to, that.to)
-                && Objects.equals(this.subject, that.subject)
                 && Objects.equals(this.text, that.text);
     }
 
@@ -37,7 +36,7 @@ public final class NotificationMail {
     public int hashCode() {
         final int PRIME = 31;
         int result = this.to != null ? this.to.hashCode() : 0;
-        result = PRIME * result + (this.subject != null ? this.subject.hashCode() : 0);
+        result = PRIME * result + this.subject.hashCode();
         result = PRIME * result + (this.text != null ? this.text.hashCode() : 0);
         return result;
     }

@@ -15,10 +15,12 @@ import java.time.Instant;
 @Service(ApplicationConstants.USER_SERVICE_BEAN_NAME)
 public class UserService {
     private final UserRepository repository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepository repository) {
+    public UserService(UserRepository repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
@@ -26,12 +28,20 @@ public class UserService {
         return this.repository.save(
                 UserEntity.builder()
                 .username(data.getUsername())
-                .password(data.getPassword())
+                .password(this.passwordEncoder.encode(data.getPassword()))
                 .email(data.getEmail())
                 .enabled(false)
                 .insertedBy(null)
                 .insertedAt(Instant.now())
                 .build()
         );
+    }
+
+    @Transactional(rollbackFor = ProcessingException.class)
+    public void enable(Long id) {
+        int count = this.repository.updateSetEnabledTrueById(id);
+
+        if (count != 1)
+            throw new ProcessingException(ProcessingException.INVALID_RESULT_COUNT_EXCEPTION_MSG_FORMAT.formatted(1, count));
     }
 }

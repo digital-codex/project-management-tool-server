@@ -41,4 +41,9 @@ public class AuthenticationService {
         result.setEnabled(persisted.isEnabled());
         return result;
     }
+
+    @Transactional
+    public void verify(String token) {
+        this.userService.enable(this.verificationTokenService.loadUserEntityIdByToken(token));
+    }
 }

@@ -26,4 +26,9 @@ public class WebSecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
                 .build();
     }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }

@@ -28,4 +28,10 @@ public class AuthenticationController {
     public ResponseEntity<UserModelData> register(@RequestBody UserModelData request) {
         return new ResponseEntity<>(this.service.register(request), HttpStatus.CREATED);
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/verify/{token}")
+    public void verify(@PathVariable("token") String token) {
+        this.service.verify(token);
+    }
 }
