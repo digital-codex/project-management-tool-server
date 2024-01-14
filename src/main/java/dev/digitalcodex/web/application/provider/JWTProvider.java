@@ -1,4 +1,4 @@
-package dev.digitalcodex.web.application.security;
+package dev.digitalcodex.web.application.provider;
 
 import dev.digitalcodex.web.application.ApplicationConstants;
 import dev.digitalcodex.web.application.exception.ProcessingException;
@@ -38,7 +38,16 @@ public class JWTProvider {
                 .compact();
     }
 
-    public PublicKey getPublicKey() {
+    public String validateJWT(String jwt) {
+        return Jwts.parserBuilder()
+                .setSigningKey(this.getPublicKey())
+                .build()
+                .parseClaimsJws(jwt)
+                .getBody()
+                .getSubject();
+    }
+
+    private PublicKey getPublicKey() {
         try {
             return this.keyStore.getCertificate("ks").getPublicKey();
         } catch (KeyStoreException e) {
@@ -46,20 +55,11 @@ public class JWTProvider {
         }
     }
 
-    public PrivateKey getPrivateKey() {
+    private PrivateKey getPrivateKey() {
         try {
             return (PrivateKey) this.keyStore.getKey("ks", "secret".toCharArray());
         } catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException e) {
             throw new ProcessingException(ProcessingException.KEYSTORE_EXCEPTION_MSG_FORMAT.formatted("retrieving public key from"));
         }
-    }
-
-    public String validate(String jwt) {
-        return Jwts.parserBuilder()
-                .setSigningKey(this.getPublicKey())
-                .build()
-                .parseClaimsJws(jwt)
-                .getBody()
-                .getSubject();
     }
 }

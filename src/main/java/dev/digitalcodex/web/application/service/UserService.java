@@ -44,4 +44,9 @@ public class UserService {
         if (count != 1)
             throw new ProcessingException(ProcessingException.INVALID_RESULT_COUNT_EXCEPTION_MSG_FORMAT.formatted(1, count));
     }
+
+    @Transactional(readOnly = true)
+    public Long loadIdByUsername(String username) {
+        return this.repository.findIdByUsername(username);
+    }
 }

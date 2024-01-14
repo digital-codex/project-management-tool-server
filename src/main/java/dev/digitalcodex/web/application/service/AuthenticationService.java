@@ -3,7 +3,7 @@ package dev.digitalcodex.web.application.service;
 import dev.digitalcodex.web.application.ApplicationConstants;
 import dev.digitalcodex.web.application.data.NotificationMail;
 import dev.digitalcodex.web.application.data.UserModelData;
-import dev.digitalcodex.web.application.security.JWTProvider;
+import dev.digitalcodex.web.application.provider.JWTProvider;
 import dev.digitalcodex.web.persistence.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;

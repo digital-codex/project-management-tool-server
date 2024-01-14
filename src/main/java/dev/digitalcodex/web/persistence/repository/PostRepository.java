@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository(PersistenceConstants.POST_REPOSITORY_BEAN_NAME)
 public interface PostRepository extends JpaRepository<PostEntity, Long> {
+     int countByForumId(Long forumId);
 }

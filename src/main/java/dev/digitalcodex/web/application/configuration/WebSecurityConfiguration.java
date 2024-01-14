@@ -2,6 +2,7 @@ package dev.digitalcodex.web.application.configuration;
 
 import dev.digitalcodex.web.application.ApplicationConstants;
 import dev.digitalcodex.web.presentation.PresentationConstants;
+import dev.digitalcodex.web.presentation.filter.JWTAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,19 +15,25 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @Configuration(ApplicationConstants.WEB_SECURITY_CONFIGURATION_BEAN_NAME)
 public class WebSecurityConfiguration {
     private UserDetailsService userDetailsService;
+    private JWTAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
+        http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth.requestMatchers(PresentationConstants.AUTHENTICATION_REQUEST_PATH + "/**").permitAll())
-                .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
-                .build();
+                .authorizeHttpRequests(auth -> auth.anyRequest().authenticated());
+
+        http
+                .addFilterBefore(this.jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
     }
 
     @Bean
@@ -44,5 +51,10 @@ public class WebSecurityConfiguration {
     @Autowired
     public void setUserDetailsService(final UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
+    }
+
+    @Autowired
+    public void setJwtAuthenticationFilter(final JWTAuthenticationFilter jwtAuthenticationFilter) {
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 }

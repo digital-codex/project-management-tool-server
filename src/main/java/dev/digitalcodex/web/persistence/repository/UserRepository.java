@@ -21,4 +21,9 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             "UPDATE UserEntity u SET u.enabled = TRUE WHERE u.id = :id"
     )
     int updateSetEnabledTrueById(@Param("id") Long id);
+
+    @Query(
+            "SELECT u.id FROM UserEntity u WHERE u.username = :username"
+    )
+    Long findIdByUsername(@Param("username") String username);
 }

@@ -73,7 +73,7 @@ public final class UserModelData {
 
     @Override
     public String toString() {
-        return "UserData[" +
+        return "UserModelData[" +
                 "username='" + this.username + "'" +
                 ", password='" + this.password + "'" +
                 ", email='" + this.email + "'" +
