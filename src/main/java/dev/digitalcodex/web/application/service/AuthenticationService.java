@@ -19,12 +19,16 @@ public class AuthenticationService {
     private final UserService userService;
     private final VerificationTokenService verificationTokenService;
     private final MailService mailService;
+    private final AuthenticationManager authenticationManager;
+    private final JWTProvider jwtProvider;
 
     @Autowired
-    public AuthenticationService(UserService userService, VerificationTokenService verificationTokenService, MailService mailService) {
+    public AuthenticationService(UserService userService, VerificationTokenService verificationTokenService, MailService mailService, AuthenticationManager authenticationManager, JWTProvider jwtProvider) {
         this.userService = userService;
         this.verificationTokenService = verificationTokenService;
         this.mailService = mailService;
+        this.authenticationManager = authenticationManager;
+        this.jwtProvider = jwtProvider;
     }
 
     @Transactional
@@ -45,5 +49,19 @@ public class AuthenticationService {
     @Transactional
     public void verify(String token) {
         this.userService.enable(this.verificationTokenService.loadUserEntityIdByToken(token));
+    }
+
+    @Transactional(readOnly = true)
+    public UserModelData login(UserModelData data) {
+        Authentication authentication = this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(data.getUsername(), data.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        User user = (User) authentication.getPrincipal();
+        String token = this.jwtProvider.generateJWT(user.getUsername());
+
+        UserModelData result = new UserModelData();
+        result.setUsername(user.getUsername());
+        result.setPassword(token);
+        result.setEnabled(user.isEnabled());
+        return result;
     }
 }

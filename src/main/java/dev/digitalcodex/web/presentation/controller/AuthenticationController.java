@@ -34,4 +34,9 @@ public class AuthenticationController {
     public void verify(@PathVariable("token") String token) {
         this.service.verify(token);
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<UserModelData> login(@RequestBody UserModelData request) {
+        return new ResponseEntity<>(this.service.login(request), HttpStatus.OK);
+    }
 }

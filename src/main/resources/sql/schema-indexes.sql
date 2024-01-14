@@ -1,0 +1,1 @@
+CREATE INDEX IF NOT EXISTS t_verification_token_token_idx ON s_forum.t_verification_token USING btree (token);

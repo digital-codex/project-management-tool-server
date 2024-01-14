@@ -18,6 +18,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @Configuration(ApplicationConstants.WEB_SECURITY_CONFIGURATION_BEAN_NAME)
 public class WebSecurityConfiguration {
+    private UserDetailsService userDetailsService;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
@@ -30,5 +32,17 @@ public class WebSecurityConfiguration {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        builder.userDetailsService(this.userDetailsService).passwordEncoder(this.passwordEncoder());
+        return builder.build();
+    }
+
+    @Autowired
+    public void setUserDetailsService(final UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
     }
 }
