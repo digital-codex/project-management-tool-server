@@ -11,7 +11,9 @@ CREATE INDEX IF NOT EXISTS t_post_inserted_by_id_idx ON s_forum.t_post USING btr
 -- s_forum.t_vote indexes
 
 CREATE INDEX IF NOT EXISTS t_vote_post_id_idx ON s_forum.t_vote USING btree (post_id);
+CREATE INDEX IF NOT EXISTS t_vote_inserted_by_idx ON s_forum.t_vote USING btree (inserted_by);
 
 -- s_forum.t_comment indexes
 
 CREATE INDEX IF NOT EXISTS t_comment_post_id_idx ON s_forum.t_comment USING btree (post_id);
+CREATE INDEX IF NOT EXISTS t_comment_inserted_by_idx ON s_forum.t_comment USING btree (inserted_by);

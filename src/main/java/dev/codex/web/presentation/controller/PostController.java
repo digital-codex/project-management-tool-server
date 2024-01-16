@@ -1,6 +1,7 @@
 package dev.codex.web.presentation.controller;
 
 import dev.codex.web.application.data.PostModelData;
+import dev.codex.web.application.service.ForumService;
 import dev.codex.web.application.service.PostService;
 import dev.codex.web.presentation.PresentationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +20,17 @@ import java.util.List;
 @RequestMapping(PresentationConstants.POST_REQUEST_PATH)
 public class PostController {
     private final PostService service;
+    private final ForumService forumService;
 
     @Autowired
-    public PostController(PostService service) {
+    public PostController(PostService service, ForumService forumService) {
         this.service = service;
+        this.forumService = forumService;
     }
 
     @PostMapping
     public ResponseEntity<PostModelData> create(@RequestBody PostModelData request) {
-        return new ResponseEntity<>(this.service.save(request), HttpStatus.CREATED);
+        return new ResponseEntity<>(this.forumService.checkAndSave(request), HttpStatus.CREATED);
     }
 
     @GetMapping

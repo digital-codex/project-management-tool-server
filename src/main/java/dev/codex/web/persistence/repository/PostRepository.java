@@ -14,12 +14,12 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<PostEntity, Long> {
      Optional<PostEntity> findByUrl(String url);
 
-     int countByForumId(Long forumId);
-
      List<PostEntity> findAllByForumId(Long forumId);
 
      @Query(
              value = "SELECT p FROM PostEntity p JOIN UserEntity u ON p.insertedBy = u.id WHERE u.username = :username"
      )
      List<PostEntity> findAllByUserEntityUsername(@Param("username") String username);
+
+     int countByForumId(Long forumId);
 }

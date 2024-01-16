@@ -16,11 +16,13 @@ import java.time.Instant;
 public class UserService {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
+    private final VerificationTokenService tokenService;
 
     @Autowired
-    public UserService(UserRepository repository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository repository, PasswordEncoder passwordEncoder, VerificationTokenService tokenService) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
+        this.tokenService = tokenService;
     }
 
     @Transactional
@@ -40,8 +42,13 @@ public class UserService {
     }
 
     @Transactional
-    public void enable(Long id) {
-        int count = this.repository.updateSetEnabledTrueById(id);
+    public String token(Long id) {
+        return this.tokenService.generate(id);
+    }
+
+    @Transactional
+    public void enable(String token) {
+        int count = this.repository.updateSetEnabledTrueById(this.tokenService.loadUserEntityIdByToken(token));
 
         if (count != 1)
             throw new ProcessingException(ProcessingException.INVALID_RESULT_COUNT_EXCEPTION_MSG_FORMAT.formatted(1, count));
@@ -50,14 +57,18 @@ public class UserService {
     @Transactional(readOnly = true)
     public Long loadIdByUsername(String username) {
         return this.repository.findIdByUsername(username)
-                .orElseThrow(() -> new ProcessingException(ProcessingException.RESOURCE_NOT_FOUND_EXCEPTION_MSG_FORMAT.formatted(UserEntity.class.getSimpleName())));
+                .orElseThrow(
+                        () -> new ProcessingException(ProcessingException.RESOURCE_NOT_FOUND_EXCEPTION_MSG_FORMAT.formatted(UserEntity.class.getSimpleName()))
+                );
     }
 
     @Transactional(readOnly = true)
     public UserModelData loadById(Long id) {
         return this.map(
                 this.repository.findById(id)
-                        .orElseThrow(() -> new ProcessingException(ProcessingException.RESOURCE_NOT_FOUND_EXCEPTION_MSG_FORMAT.formatted(UserEntity.class.getSimpleName())))
+                        .orElseThrow(
+                                () -> new ProcessingException(ProcessingException.RESOURCE_NOT_FOUND_EXCEPTION_MSG_FORMAT.formatted(UserEntity.class.getSimpleName()))
+                        )
         );
     }
 

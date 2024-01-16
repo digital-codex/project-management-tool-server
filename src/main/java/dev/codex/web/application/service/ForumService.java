@@ -2,6 +2,8 @@ package dev.codex.web.application.service;
 
 import dev.codex.web.application.ApplicationConstants;
 import dev.codex.web.application.data.ForumModelData;
+import dev.codex.web.application.data.PostModelData;
+import dev.codex.web.application.exception.ProcessingException;
 import dev.codex.web.persistence.entity.ForumEntity;
 import dev.codex.web.persistence.repository.ForumRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +56,14 @@ public class ForumService {
     @Transactional(readOnly = true)
     public boolean existsById(Long id) {
         return this.repository.existsById(id);
+    }
+
+    @Transactional
+    public PostModelData checkAndSave(PostModelData data) {
+        if (data.getForumId() == null || !this.existsById(data.getForumId()))
+            throw new ProcessingException(ProcessingException.RESOURCE_NOT_FOUND_EXCEPTION_MSG_FORMAT.formatted(ForumEntity.class.getSimpleName()));
+
+        return this.postService.save(data);
     }
 
     private ForumModelData map(ForumEntity entity) {

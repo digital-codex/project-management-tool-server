@@ -8,6 +8,7 @@ public class ProcessingException extends RuntimeException {
     public static final String BLANK_STRING_EXCEPTION_MSG_FORMAT = "Field %s cannot be null or blank in %s";
     public static final String RESOURCE_NOT_FOUND_EXCEPTION_MSG_FORMAT = "Resource %s not found";
     public static final String INVALID_RESULT_COUNT_EXCEPTION_MSG_FORMAT = "Excepted %d updates, but was %d";
+    public static final String PERMISSION_DENIED_EXCEPTION_MSG_FORMAT = "%s does not have permission for this operation";
 
     public ProcessingException(String message) {
         super(message);

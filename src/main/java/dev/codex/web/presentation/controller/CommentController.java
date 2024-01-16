@@ -2,6 +2,7 @@ package dev.codex.web.presentation.controller;
 
 import dev.codex.web.application.data.CommentModelData;
 import dev.codex.web.application.service.CommentService;
+import dev.codex.web.application.service.PostService;
 import dev.codex.web.presentation.PresentationConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,15 +20,17 @@ import java.util.List;
 @RequestMapping(PresentationConstants.COMMENT_REQUEST_PATH)
 public class CommentController {
     private final CommentService service;
+    private final PostService postService;
 
     @Autowired
-    public CommentController(CommentService service) {
+    public CommentController(CommentService service, PostService postService) {
         this.service = service;
+        this.postService = postService;
     }
 
     @PostMapping
     public ResponseEntity<CommentModelData> create(@RequestBody CommentModelData request) {
-        return new ResponseEntity<>(this.service.save(request), HttpStatus.CREATED);
+        return new ResponseEntity<>(this.postService.checkAndSave(request), HttpStatus.CREATED);
     }
 
     @GetMapping("/by-post/{id}")

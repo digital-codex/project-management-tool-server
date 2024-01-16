@@ -8,12 +8,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository(PersistenceConstants.COMMENT_REPOSITORY_BEAN_NAME)
 public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
-    int countByPostId(Long postId);
-
     List<CommentEntity> findAllByPostId(Long postId);
 
     @Query(
@@ -21,8 +18,5 @@ public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
     )
     List<CommentEntity> findAllByUserEntityUsername(@Param("username") String username);
 
-    @Query(
-            value = "SELECT p.url FROM CommentEntity c JOIN PostEntity p ON c.postId = p.id WHERE c.postId = :postId"
-    )
-    Optional<String> findPostEntityUrlByPostId(@Param("postId") Long postId);
+    int countByPostId(Long postId);
 }

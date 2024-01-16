@@ -40,6 +40,8 @@ public class VerificationTokenService {
     @Transactional(readOnly = true)
     public Long loadUserEntityIdByToken(String token) {
         return this.repository.findInsertedByByToken(token)
-                .orElseThrow(() -> new ProcessingException(ProcessingException.RESOURCE_NOT_FOUND_EXCEPTION_MSG_FORMAT.formatted(VerificationTokenEntity.class.getSimpleName())));
+                .orElseThrow(
+                        () -> new ProcessingException(ProcessingException.RESOURCE_NOT_FOUND_EXCEPTION_MSG_FORMAT.formatted(VerificationTokenEntity.class.getSimpleName()))
+                );
     }
 }
