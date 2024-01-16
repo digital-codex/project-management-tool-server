@@ -7,7 +7,7 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.1.7</version>
     </parent>
-    <groupId>dev.digitalcodex.web</groupId>
+    <groupId>dev.codex.web</groupId>
     <artifactId>forum-webapp</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Forum Web Application</name>
