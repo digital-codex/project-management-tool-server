@@ -29,7 +29,7 @@ public final class PostEntity {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "url", nullable = false, length = 2047)
+    @Column(name = "url", unique = true, nullable = false, length = 2047)
     private String url;
 
     @Column(name = PersistenceConstants.INSERTED_BY_ATTRIBUTE_NAME, updatable = false)
@@ -62,11 +62,6 @@ public final class PostEntity {
             this.entity = new PostEntity();
         }
 
-        public PostEntityBuilder id(Long id) {
-            this.entity.setId(id);
-            return this;
-        }
-
         public PostEntityBuilder forumId(Long forumId) {
             this.entity.setForumId(forumId);
             return this;
@@ -97,12 +92,8 @@ public final class PostEntity {
         }
     }
 
-    public Long getId() {
+    public Long id() {
         return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Long getForumId() {

@@ -61,11 +61,6 @@ public final class VoteEntity {
             this.entity = new VoteEntity();
         }
 
-        public VoteEntityBuilder id(Long id) {
-            this.entity.setId(id);
-            return this;
-        }
-
         public VoteEntityBuilder postId(Long postId) {
             this.entity.setPostId(postId);
             return this;
@@ -91,12 +86,8 @@ public final class VoteEntity {
         }
     }
 
-    public Long getId() {
+    public Long id() {
         return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Long getPostId() {

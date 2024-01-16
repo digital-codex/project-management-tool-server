@@ -57,11 +57,6 @@ public final class VerificationTokenEntity {
             this.entity = new VerificationTokenEntity();
         }
 
-        public VerificationTokenEntityBuilder id(Long id) {
-            this.entity.setId(id);
-            return this;
-        }
-
         public VerificationTokenEntityBuilder token(String token) {
             this.entity.setToken(token);
             return this;
@@ -87,12 +82,8 @@ public final class VerificationTokenEntity {
         }
     }
 
-    public Long getId() {
+    public Long id() {
         return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getToken() {

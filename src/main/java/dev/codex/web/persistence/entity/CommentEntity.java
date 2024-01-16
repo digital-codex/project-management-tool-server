@@ -58,11 +58,6 @@ public final class CommentEntity {
             this.entity = new CommentEntity();
         }
 
-        public CommentEntityBuilder id(Long id) {
-            this.entity.setId(id);
-            return this;
-        }
-
         public CommentEntityBuilder postId(Long postId) {
             this.entity.setPostId(postId);
             return this;
@@ -88,12 +83,8 @@ public final class CommentEntity {
         }
     }
 
-    public Long getId() {
+    public Long id() {
         return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Long getPostId() {

@@ -15,10 +15,14 @@ import java.time.Instant;
 import java.util.List;
 
 @Service(ApplicationConstants.POST_SERVICE_BEAN_NAME)
+// TODO: refactor service hierarchy to remove cyclic dependencies
 public class PostService {
     private final PostRepository repository;
     private final PostDescriptionService descriptionService;
     private final UserService userService;
+/*
+    private final ForumService forumService;
+*/
     private final VoteService voteService;
     private final CommentService commentService;
 
@@ -27,6 +31,9 @@ public class PostService {
         this.repository = repository;
         this.descriptionService = descriptionService;
         this.userService = userService;
+/*
+        this.forumService = forumService;
+*/
         this.voteService = voteService;
         this.commentService = commentService;
     }
@@ -45,8 +52,10 @@ public class PostService {
 
     @Transactional
     public PostModelData save(PostModelData data, Long userId) {
-        if (data.getForumId() == null)
-            throw new ProcessingException(ProcessingException.NULL_POINTER_EXCEPTION_MSG_FORMAT.formatted("forumId"));
+/*
+        if (data.getForumId() == null || !this.forumService.existsById(data.getForumId()))
+            throw new ProcessingException(ProcessingException.RESOURCE_NOT_FOUND_EXCEPTION_MSG_FORMAT.formatted(ForumEntity.class.getSimpleName()));
+*/
 
         return this.map(
                 this.repository.save(
@@ -91,15 +100,20 @@ public class PostService {
         return this.repository.countByForumId(formId);
     }
 
+    @Transactional(readOnly = true)
+    public boolean existsById(Long id) {
+        return this.repository.existsById(id);
+    }
+
     private PostModelData map(PostEntity entity) {
         PostModelData data = new PostModelData();
-        data.setId(entity.getId());
+        data.setId(entity.id());
         data.setForumId(entity.getForumId());
         data.setTitle(entity.getTitle());
         data.setUrl(entity.getUrl());
-        data.setDescription(this.descriptionService.loadBySharedId(entity.getId()));
-        data.setVoteCount(this.voteService.loadCountByPostId(entity.getId()));
-        data.setCommentCount(this.commentService.loadCountByPostId(entity.getId()));
+        data.setDescription(this.descriptionService.loadBySharedId(entity.id()));
+        data.setVoteCount(this.voteService.loadCountByPostId(entity.id()));
+        data.setCommentCount(this.commentService.loadCountByPostId(entity.id()));
         return data;
     }
 }

@@ -24,16 +24,18 @@ public class UserService {
     }
 
     @Transactional
-    public UserEntity save(UserModelData data) {
-        return this.repository.save(
-                UserEntity.builder()
-                .username(data.getUsername())
-                .password(this.passwordEncoder.encode(data.getPassword()))
-                .email(data.getEmail())
-                .enabled(false)
-                .insertedBy(null)
-                .insertedAt(Instant.now())
-                .build()
+    public UserModelData save(UserModelData data) {
+        return this.map(
+                this.repository.save(
+                        UserEntity.builder()
+                                .username(data.getUsername())
+                                .password(this.passwordEncoder.encode(data.getPassword()))
+                                .email(data.getEmail())
+                                .enabled(false)
+                                .insertedBy(null)
+                                .insertedAt(Instant.now())
+                                .build()
+                )
         );
     }
 
@@ -47,6 +49,24 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Long loadIdByUsername(String username) {
-        return this.repository.findIdByUsername(username);
+        return this.repository.findIdByUsername(username)
+                .orElseThrow(() -> new ProcessingException(ProcessingException.RESOURCE_NOT_FOUND_EXCEPTION_MSG_FORMAT.formatted(UserEntity.class.getSimpleName())));
+    }
+
+    @Transactional(readOnly = true)
+    public UserModelData loadById(Long id) {
+        return this.map(
+                this.repository.findById(id)
+                        .orElseThrow(() -> new ProcessingException(ProcessingException.RESOURCE_NOT_FOUND_EXCEPTION_MSG_FORMAT.formatted(UserEntity.class.getSimpleName())))
+        );
+    }
+
+    private UserModelData map(UserEntity entity) {
+        UserModelData data = new UserModelData();
+        data.setId(entity.id());
+        data.setUsername(entity.getUsername());
+        data.setEmail(entity.getEmail());
+        data.setEnabled(entity.isEnabled());
+        return data;
     }
 }

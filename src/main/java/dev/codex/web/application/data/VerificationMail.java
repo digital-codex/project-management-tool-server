@@ -2,12 +2,12 @@ package dev.codex.web.application.data;
 
 import java.util.Objects;
 
-public final class NotificationMail implements Mail {
+public final class VerificationMail implements Mail {
     private final String to;
-    private final String subject = "Your post has been updated";
+    private final String subject = "Please Activate your Account";
     private final String text;
 
-    public NotificationMail(String to, String text) {
+    public VerificationMail(String to, String text) {
         this.to = to;
         this.text = text;
     }
@@ -30,7 +30,7 @@ public final class NotificationMail implements Mail {
     @Override
     public boolean equals(Object o) {
         if (o == this) return true;
-        if (!(o instanceof NotificationMail that)) return false;
+        if (!(o instanceof VerificationMail that)) return false;
         return Objects.equals(this.to, that.to)
                 && Objects.equals(this.text, that.text);
     }

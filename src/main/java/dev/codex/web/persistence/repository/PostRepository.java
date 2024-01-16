@@ -8,9 +8,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository(PersistenceConstants.POST_REPOSITORY_BEAN_NAME)
 public interface PostRepository extends JpaRepository<PostEntity, Long> {
+     Optional<PostEntity> findByUrl(String url);
+
      int countByForumId(Long forumId);
 
      List<PostEntity> findAllByForumId(Long forumId);

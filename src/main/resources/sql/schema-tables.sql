@@ -9,8 +9,8 @@ CREATE TABLE IF NOT EXISTS s_forum.t_user (
 	enabled bool NOT NULL DEFAULT false,
     inserted_by int8 NULL,
 	inserted_at timestamp NULL,
-	CONSTRAINT t_user_email_unique UNIQUE (email),
-	CONSTRAINT t_user_username_unique UNIQUE (username),
+	CONSTRAINT t_user_email_unq UNIQUE (email),
+	constraint t_user_username_unq UNIQUE (username),
 	CONSTRAINT t_user_pk PRIMARY KEY (id)
 );
 
@@ -53,6 +53,7 @@ CREATE TABLE IF NOT EXISTS s_forum.t_post (
 	url varchar(2047) NOT NULL,
 	inserted_by int8 NULL,
 	inserted_at timestamp NULL,
+    CONSTRAINT t_post_url_unq UNIQUE (url),
 	CONSTRAINT t_post_pk PRIMARY KEY (id)
 );
 

@@ -66,11 +66,6 @@ public final class UserEntity {
             this.entity = new UserEntity();
         }
 
-        public UserEntityBuilder id(Long id) {
-            this.entity.setId(id);
-            return this;
-        }
-
         public UserEntityBuilder username(String username) {
             this.entity.setUsername(username);
             return this;
@@ -106,12 +101,8 @@ public final class UserEntity {
         }
     }
 
-    public Long getId() {
+    public Long id() {
         return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getUsername() {

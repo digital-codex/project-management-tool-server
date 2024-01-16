@@ -3,6 +3,7 @@ package dev.codex.web.application.data;
 import java.util.Objects;
 
 public final class UserModelData {
+    private Long id;
     private String username;
     private String password;
     private String email;
@@ -12,11 +13,12 @@ public final class UserModelData {
         super();
     }
 
-    public UserModelData(String username, String password, String email, boolean enabled) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.enabled = enabled;
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -55,7 +57,8 @@ public final class UserModelData {
     public boolean equals(Object o) {
         if ( o == this ) return true;
         if ( !( o instanceof UserModelData that ) ) return false;
-        return Objects.equals( this.username, that.username )
+        return Objects.equals( this.id, that.id )
+                && Objects.equals( this.username, that.username )
                 && Objects.equals( this.password, that.password )
                 && Objects.equals( this.email, that.email )
                 && this.enabled == that.enabled;
@@ -64,7 +67,8 @@ public final class UserModelData {
     @Override
     public int hashCode() {
         final int PRIME = 31;
-        int result = this.username != null ? this.username.hashCode() : 0;
+        int result = this.id != null ? (int) (this.id ^ (this.id >>> 32)) : 0;
+        result = PRIME * result + (this.username != null ? this.username.hashCode() : 0);
         result = PRIME * result + (this.password != null ? this.password.hashCode() : 0);
         result = PRIME * result + (this.email != null ? this.email.hashCode() : 0);
         result = PRIME * result + (this.enabled ? 1231 : 1237);
@@ -74,7 +78,8 @@ public final class UserModelData {
     @Override
     public String toString() {
         return "UserModelData[" +
-                "username='" + this.username + "'" +
+                "id=" + this.id +
+                ", username='" + this.username + "'" +
                 ", password='" + this.password + "'" +
                 ", email='" + this.email + "'" +
                 ", enabled=" + this.enabled +

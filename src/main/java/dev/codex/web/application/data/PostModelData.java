@@ -15,19 +15,6 @@ public final class PostModelData {
         super();
     }
 
-    public PostModelData(Long id) {
-        this.id = id;
-    }
-
-    public PostModelData(Long forumId, String title, String url, String description, int voteCount, int commentCount) {
-        this.forumId = forumId;
-        this.title = title;
-        this.url = url;
-        this.description = description;
-        this.voteCount = voteCount;
-        this.commentCount = commentCount;
-    }
-
     public Long getId() {
         return this.id;
     }

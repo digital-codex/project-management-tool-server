@@ -1,7 +1,7 @@
 package dev.codex.web.application.service;
 
 import dev.codex.web.application.ApplicationConstants;
-import dev.codex.web.application.data.NotificationMail;
+import dev.codex.web.application.data.Mail;
 import dev.codex.web.application.exception.ProcessingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +22,8 @@ public class MailService {
     private final TemplateEngine templateEngine;
     private final JavaMailSender javaMailSender;
 
-    public static final String NOTIFICATION_MAIL_TEXT_MSG_FORMAT = "Thank you for signing up for our Forum Web Application, please click on the below url to activate your account : http://localhost:8080/api/auth/verify/%s";
+    public static final String VERIFICATION_MAIL_TEXT_MSG_FORMAT = "Thank you for signing up for our Forum Web Application, please click on the below url to activate your account : http://localhost:8080/api/auth/verify/%s";
+    public static final String COMMENT_ADDED_MAIL_TEXT_MSG_FORMAT = "%s added a comment to your post : %s";
 
     @Autowired
     public MailService(TemplateEngine templateEngine, JavaMailSender javaMailSender) {
@@ -31,7 +32,7 @@ public class MailService {
     }
 
     @Async
-    public void send(NotificationMail mail) {
+    public void send(Mail mail) {
         MimeMessagePreparator preparator = mimeMessage -> {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
             helper.setFrom("forum-webapp@email.com");

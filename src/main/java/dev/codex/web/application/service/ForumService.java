@@ -51,12 +51,17 @@ public class ForumService {
         return this.repository.findAll().stream().map(this::map).toList();
     }
 
+    @Transactional(readOnly = true)
+    public boolean existsById(Long id) {
+        return this.repository.existsById(id);
+    }
+
     private ForumModelData map(ForumEntity entity) {
         ForumModelData data = new ForumModelData();
-        data.setId(entity.getId());
+        data.setId(entity.id());
         data.setName(entity.getName());
         data.setDescription(entity.getDescription());
-        data.setPostCount(this.postService.loadCountByForumId(entity.getId()));
+        data.setPostCount(this.postService.loadCountByForumId(entity.id()));
         return data;
     }
 }

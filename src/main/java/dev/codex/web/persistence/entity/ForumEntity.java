@@ -58,11 +58,6 @@ public final class ForumEntity {
             this.entity = new ForumEntity();
         }
 
-        public ForumEntityBuilder id(Long id) {
-            this.entity.setId(id);
-            return this;
-        }
-
         public ForumEntityBuilder name(String name) {
             this.entity.setName(name);
             return this;
@@ -88,12 +83,8 @@ public final class ForumEntity {
         }
     }
 
-    public Long getId() {
+    public Long id() {
         return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getName() {
