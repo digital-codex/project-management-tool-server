@@ -30,7 +30,7 @@ public class CommentController {
 
     @PostMapping
     public ResponseEntity<CommentModelData> create(@RequestBody CommentModelData request) {
-        return new ResponseEntity<>(this.postService.checkAndSave(request), HttpStatus.CREATED);
+        return new ResponseEntity<>(this.postService.checkAndSaveComment(request), HttpStatus.CREATED);
     }
 
     @GetMapping("/by-post/{id}")

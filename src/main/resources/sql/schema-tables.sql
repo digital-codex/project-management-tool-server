@@ -94,6 +94,7 @@ CREATE TABLE IF NOT EXISTS s_forum.t_vote (
 
 ALTER TABLE IF EXISTS s_forum.t_vote ADD CONSTRAINT t_vote_post_id_fk FOREIGN KEY (post_id) REFERENCES s_forum.t_post(id);
 ALTER TABLE IF EXISTS s_forum.t_vote ADD CONSTRAINT t_vote_inserted_by_fk FOREIGN KEY (inserted_by) REFERENCES s_forum.t_user(id);
+ALTER TABLE IF EXISTS s_forum.t_vote ADD CONSTRAINT t_vote_post_id_vote_type_inserted_by_unq UNIQUE (post_id, vote_type, inserted_by);
 
 -- s_forum.t_comment definition
 

@@ -3,6 +3,7 @@ package dev.codex.web.application.service;
 import dev.codex.web.application.ApplicationConstants;
 import dev.codex.web.application.data.CommentModelData;
 import dev.codex.web.application.data.PostModelData;
+import dev.codex.web.application.data.VoteModelData;
 import dev.codex.web.application.exception.ProcessingException;
 import dev.codex.web.application.util.Strings;
 import dev.codex.web.persistence.entity.ForumEntity;
@@ -107,9 +108,18 @@ public class PostService {
     public int loadCountByForumId(Long formId) {
         return this.repository.countByForumId(formId);
     }
+    
+    @Transactional
+    public VoteModelData checkAndSaveVote(VoteModelData data) {
+        PostModelData post;
+        if (data.getPostId() == null || (post = this.loadById(data.getPostId())) == null)
+            throw new ProcessingException(ProcessingException.RESOURCE_NOT_FOUND_EXCEPTION_MSG_FORMAT.formatted(PostEntity.class.getSimpleName()));
+
+        return this.voteService.save(data, post.getUrl());
+    }
 
     @Transactional
-    public CommentModelData checkAndSave(CommentModelData data) {
+    public CommentModelData checkAndSaveComment(CommentModelData data) {
         PostModelData post;
         if (data.getPostId() == null || (post = this.loadById(data.getPostId())) == null)
             throw new ProcessingException(ProcessingException.RESOURCE_NOT_FOUND_EXCEPTION_MSG_FORMAT.formatted(PostEntity.class.getSimpleName()));
@@ -124,7 +134,8 @@ public class PostService {
         data.setTitle(entity.getTitle());
         data.setUrl(entity.getUrl());
         data.setDescription(this.descriptionService.loadBySharedId(entity.id()));
-        data.setVoteCount(this.voteService.loadCountByPostId(entity.id()));
+        List<VoteModelData> votes = this.voteService.loadAllByPostId(entity.id());
+        data.setVoteCount(votes.stream().mapToInt(VoteModelData::getVote).sum());
         data.setCommentCount(this.commentService.loadCountByPostId(entity.id()));
         return data;
     }

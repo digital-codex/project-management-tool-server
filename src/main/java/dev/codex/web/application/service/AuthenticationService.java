@@ -3,7 +3,6 @@ package dev.codex.web.application.service;
 import dev.codex.web.application.ApplicationConstants;
 import dev.codex.web.application.data.UserModelData;
 import dev.codex.web.application.data.VerificationMail;
-import dev.codex.web.application.exception.ProcessingException;
 import dev.codex.web.application.provider.JWTProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -51,8 +50,6 @@ public class AuthenticationService {
         Authentication authentication = this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(data.getUsername(), data.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         User user = (User) authentication.getPrincipal();
-        if (!user.isEnabled())
-            throw new ProcessingException(ProcessingException.PERMISSION_DENIED_EXCEPTION_MSG_FORMAT.formatted(user.getUsername()));
 
         String token = this.jwtProvider.generateJWT(user.getUsername());
 
