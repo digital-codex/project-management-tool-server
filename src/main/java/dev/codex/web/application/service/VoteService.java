@@ -9,7 +9,6 @@ import dev.codex.web.application.type.VoteType;
 import dev.codex.web.persistence.entity.VoteEntity;
 import dev.codex.web.persistence.repository.VoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,13 +30,11 @@ public class VoteService {
 
     @Transactional
     public VoteModelData save(VoteModelData data, String postUrl) {
-        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long userId = this.userService.loadIdByUsername(username);
-        return this.save(data, userId, postUrl);
+        return this.save(data, this.userService.loadCurrentUser(), postUrl);
     }
 
     @Transactional
-    public VoteModelData save(VoteModelData data, Long userId, String postUrl) {
+    public VoteModelData save(VoteModelData data, UserModelData user, String postUrl) {
         if (data.getPostId() == null)
             throw new ProcessingException(ProcessingException.NULL_POINTER_EXCEPTION_MSG_FORMAT.formatted("postId"));
 
@@ -50,19 +47,18 @@ public class VoteService {
         else
             throw new ProcessingException(ProcessingException.NULL_POINTER_EXCEPTION_MSG_FORMAT.formatted("voteType"));
 
-        VoteModelData current = this.loadByPostIdAndInsertedBy(data.getPostId(), userId);
+        VoteModelData current = this.loadByPostIdAndInsertedBy(data.getPostId(), user.getId());
         if (current != null && current.getVote() == data.getVote())
             throw new ProcessingException(ProcessingException.INVALID_RESULT_COUNT_EXCEPTION_MSG_FORMAT.formatted(0, 1));
         else if (current != null)
             this.repository.deleteById(current.getId());
 
-        UserModelData user = this.userService.loadById(userId);
         VoteModelData persisted = this.map(
                 this.repository.save(
                         VoteEntity.builder()
                                 .postId(data.getPostId())
                                 .voteType(voteType)
-                                .insertedBy(userId)
+                                .insertedBy(user.getId())
                                 .insertedAt(Instant.now())
                                 .build()
                 )

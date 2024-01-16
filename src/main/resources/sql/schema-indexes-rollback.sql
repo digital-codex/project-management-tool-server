@@ -14,6 +14,10 @@ DROP INDEX IF EXISTS t_vote_post_id_idx;
 DROP INDEX IF EXISTS t_post_inserted_by_id_idx;
 DROP INDEX IF EXISTS t_post_forum_id_idx;
 
+-- s_forum.t_refresh_token indexes rollback
+
+DROP INDEX IF EXISTS t_refresh_token_token_idx;
+
 -- s_forum.t_verification_token indexes rollback
 
 DROP INDEX IF EXISTS t_verification_token_token_idx;

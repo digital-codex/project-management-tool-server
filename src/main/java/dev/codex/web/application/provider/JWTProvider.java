@@ -15,6 +15,9 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 
 @Service(ApplicationConstants.JWT_PROVIDER_BEAN_NAME)
 public class JWTProvider {
@@ -34,7 +37,9 @@ public class JWTProvider {
     public String generateJWT(String subject) {
         return Jwts.builder()
                 .setSubject(subject)
+                .setIssuedAt(Date.from(Instant.now()))
                 .signWith(this.getPrivateKey())
+                .setExpiration(Date.from(Instant.now().plus(8, ChronoUnit.HOURS)))
                 .compact();
     }
 

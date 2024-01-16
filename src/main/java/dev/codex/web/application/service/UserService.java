@@ -6,6 +6,8 @@ import dev.codex.web.application.exception.ProcessingException;
 import dev.codex.web.persistence.entity.UserEntity;
 import dev.codex.web.persistence.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,13 +18,15 @@ import java.time.Instant;
 public class UserService {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
-    private final VerificationTokenService tokenService;
+    private final VerificationTokenService verificationTokenService;
+    private final RefreshTokenService refreshTokenService;
 
     @Autowired
-    public UserService(UserRepository repository, PasswordEncoder passwordEncoder, VerificationTokenService tokenService) {
+    public UserService(UserRepository repository, PasswordEncoder passwordEncoder, VerificationTokenService verificationTokenService, RefreshTokenService refreshTokenService) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
-        this.tokenService = tokenService;
+        this.verificationTokenService = verificationTokenService;
+        this.refreshTokenService = refreshTokenService;
     }
 
     @Transactional
@@ -42,34 +46,45 @@ public class UserService {
     }
 
     @Transactional
-    public String token(Long id) {
-        return this.tokenService.generate(id);
+    public String newVerificationToken(Long id) {
+        return this.verificationTokenService.generate(id);
+    }
+
+    @Transactional
+    public String newRefreshToken(Long id) {
+        return this.refreshTokenService.generate(id);
     }
 
     @Transactional
     public void enable(String token) {
-        int count = this.repository.updateSetEnabledTrueById(this.tokenService.loadUserEntityIdByToken(token));
+        int count = this.repository.updateSetEnabledTrueById(this.verificationTokenService.loadUserEntityIdByToken(token));
 
         if (count != 1)
             throw new ProcessingException(ProcessingException.INVALID_RESULT_COUNT_EXCEPTION_MSG_FORMAT.formatted(1, count));
     }
 
     @Transactional(readOnly = true)
-    public Long loadIdByUsername(String username) {
-        return this.repository.findIdByUsername(username)
-                .orElseThrow(
-                        () -> new ProcessingException(ProcessingException.RESOURCE_NOT_FOUND_EXCEPTION_MSG_FORMAT.formatted(UserEntity.class.getSimpleName()))
-                );
+    public UserModelData loadCurrentUser(String username) {
+        UserEntity user = this.repository.findByUsername(username).orElse(null);
+        if (user == null) {
+            user =  this.repository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(ProcessingException.RESOURCE_NOT_FOUND_EXCEPTION_MSG_FORMAT.formatted(UserEntity.class.getSimpleName())));
+        }
+        return this.map(user);
     }
 
     @Transactional(readOnly = true)
-    public UserModelData loadById(Long id) {
-        return this.map(
-                this.repository.findById(id)
-                        .orElseThrow(
-                                () -> new ProcessingException(ProcessingException.RESOURCE_NOT_FOUND_EXCEPTION_MSG_FORMAT.formatted(UserEntity.class.getSimpleName()))
-                        )
-        );
+    public UserModelData loadCurrentUser() {
+        return this.loadCurrentUser((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+    }
+
+    @Transactional(readOnly = true)
+    public boolean checkRefreshToken(String token) {
+        return this.refreshTokenService.existsByToken(token);
+    }
+
+    @Transactional
+    public void deleteRefreshToken(String token) {
+        this.refreshTokenService.deleteByToken(token);
     }
 
     private UserModelData map(UserEntity entity) {

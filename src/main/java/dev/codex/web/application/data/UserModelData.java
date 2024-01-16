@@ -8,6 +8,8 @@ public final class UserModelData {
     private String password;
     private String email;
     private boolean enabled;
+    private String authenticationToken;
+    private String refreshToken;
 
     public UserModelData() {
         super();
@@ -53,6 +55,22 @@ public final class UserModelData {
         this.enabled = enabled;
     }
 
+    public String getAuthenticationToken() {
+        return this.authenticationToken;
+    }
+
+    public void setAuthenticationToken(String authenticationToken) {
+        this.authenticationToken = authenticationToken;
+    }
+
+    public String getRefreshToken() {
+        return this.refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
     @Override
     public boolean equals(Object o) {
         if ( o == this ) return true;
@@ -61,7 +79,9 @@ public final class UserModelData {
                 && Objects.equals( this.username, that.username )
                 && Objects.equals( this.password, that.password )
                 && Objects.equals( this.email, that.email )
-                && this.enabled == that.enabled;
+                && this.enabled == that.enabled
+                && Objects.equals( this.authenticationToken, that.authenticationToken)
+                && Objects.equals( this.refreshToken, that.refreshToken);
     }
 
     @Override
@@ -72,6 +92,8 @@ public final class UserModelData {
         result = PRIME * result + (this.password != null ? this.password.hashCode() : 0);
         result = PRIME * result + (this.email != null ? this.email.hashCode() : 0);
         result = PRIME * result + (this.enabled ? 1231 : 1237);
+        result = PRIME * result + (this.authenticationToken != null ? this.authenticationToken.hashCode() : 0);
+        result = PRIME * result + (this.refreshToken != null ? this.refreshToken.hashCode() : 0);
         return result;
     }
 
@@ -83,6 +105,8 @@ public final class UserModelData {
                 ", password='" + this.password + "'" +
                 ", email='" + this.email + "'" +
                 ", enabled=" + this.enabled +
+                ", authenticationToken='" + this.authenticationToken + "'" +
+                ", refreshToken='" + this.refreshToken + "'" +
                 "]";
     }
 }

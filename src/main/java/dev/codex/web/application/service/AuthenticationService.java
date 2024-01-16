@@ -3,7 +3,9 @@ package dev.codex.web.application.service;
 import dev.codex.web.application.ApplicationConstants;
 import dev.codex.web.application.data.UserModelData;
 import dev.codex.web.application.data.VerificationMail;
+import dev.codex.web.application.exception.ProcessingException;
 import dev.codex.web.application.provider.JWTProvider;
+import dev.codex.web.persistence.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,7 +33,7 @@ public class AuthenticationService {
     @Transactional
     public UserModelData register(UserModelData data) {
         UserModelData persisted = this.userService.save(data);
-        String token = this.userService.token(persisted.getId());
+        String token = this.userService.newVerificationToken(persisted.getId());
 
         this.mailService.send(
                 new VerificationMail(persisted.getEmail(), MailService.VERIFICATION_MAIL_TEXT_MSG_FORMAT.formatted(token))
@@ -45,18 +47,32 @@ public class AuthenticationService {
         this.userService.enable(token);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public UserModelData login(UserModelData data) {
         Authentication authentication = this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(data.getUsername(), data.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         User user = (User) authentication.getPrincipal();
 
-        String token = this.jwtProvider.generateJWT(user.getUsername());
+        UserModelData current = this.userService.loadCurrentUser(user.getUsername());
+        current.setAuthenticationToken(this.jwtProvider.generateJWT(user.getUsername()));
+        current.setRefreshToken(this.userService.newRefreshToken(current.getId()));
+        return current;
+    }
 
-        UserModelData result = new UserModelData();
-        result.setUsername(user.getUsername());
-        result.setPassword(token);
-        result.setEnabled(user.isEnabled());
-        return result;
+    @Transactional
+    public UserModelData refresh(UserModelData data) {
+        if (this.userService.checkRefreshToken(data.getRefreshToken())) {
+            UserModelData current = this.userService.loadCurrentUser(data.getUsername());
+            current.setAuthenticationToken(this.jwtProvider.generateJWT(data.getUsername()));
+            current.setRefreshToken(data.getRefreshToken());
+            return current;
+        }
+
+        throw new ProcessingException(ProcessingException.RESOURCE_NOT_FOUND_EXCEPTION_MSG_FORMAT.formatted(UserEntity.class.getSimpleName()));
+    }
+
+    @Transactional
+    public void logout(UserModelData data) {
+        this.userService.deleteRefreshToken(data.getRefreshToken());
     }
 }

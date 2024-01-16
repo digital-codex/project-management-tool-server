@@ -29,6 +29,20 @@ CREATE TABLE IF NOT EXISTS s_forum.t_verification_token (
 
 ALTER TABLE IF EXISTS s_forum.t_verification_token ADD CONSTRAINT t_verification_token_inserted_by_fk FOREIGN KEY (inserted_by) REFERENCES s_forum.t_user(id);
 
+-- s_forum.t_refresh_token definition
+
+CREATE TABLE IF NOT EXISTS s_forum.t_refresh_token (
+    id int8 NOT NULL,
+    "token" varchar(511) NOT NULL,
+    inserted_by int8 NULL,
+    inserted_at timestamp NULL,
+    CONSTRAINT t_refresh_token_pk PRIMARY KEY (id)
+);
+
+-- s_forum.t_verification_token foreign keys
+
+ALTER TABLE IF EXISTS s_forum.t_refresh_token ADD CONSTRAINT t_refresh_token_inserted_by_fk FOREIGN KEY (inserted_by) REFERENCES s_forum.t_user(id);
+
 -- s_forum.t_forum definition
 
 CREATE TABLE IF NOT EXISTS s_forum.t_forum (

@@ -39,4 +39,15 @@ public class AuthenticationController {
     public ResponseEntity<UserModelData> login(@RequestBody UserModelData request) {
         return new ResponseEntity<>(this.service.login(request), HttpStatus.OK);
     }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<UserModelData> refresh(@RequestBody UserModelData request) {
+        return new ResponseEntity<>(this.service.refresh(request), HttpStatus.CREATED);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/logout")
+    public void logout(@RequestBody UserModelData request) {
+        this.service.logout(request);
+    }
 }

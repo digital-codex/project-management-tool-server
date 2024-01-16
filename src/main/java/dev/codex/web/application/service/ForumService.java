@@ -7,7 +7,6 @@ import dev.codex.web.application.exception.ProcessingException;
 import dev.codex.web.persistence.entity.ForumEntity;
 import dev.codex.web.persistence.repository.ForumRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,9 +28,7 @@ public class ForumService {
 
     @Transactional
     public ForumModelData save(ForumModelData data) {
-        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long userId = this.userService.loadIdByUsername(username);
-        return this.save(data, userId);
+        return this.save(data, this.userService.loadCurrentUser().getId());
     }
 
     @Transactional

@@ -14,7 +14,7 @@ public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
     List<CommentEntity> findAllByPostId(Long postId);
 
     @Query(
-            value = "SELECT c FROM CommentEntity c JOIN UserEntity u ON c.insertedBy = u.id WHERE u.username = :username"
+            "SELECT c FROM CommentEntity c JOIN UserEntity u ON c.insertedBy = u.id WHERE u.username = :username"
     )
     List<CommentEntity> findAllByUserEntityUsername(@Param("username") String username);
 

@@ -16,11 +16,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     Optional<UserEntity> findByEmail(String email);
 
-    @Query(
-            "SELECT u.id FROM UserEntity u WHERE u.username = :username"
-    )
-    Optional<Long> findIdByUsername(@Param("username") String username);
-
     @Modifying
     @Query(
             "UPDATE UserEntity u SET u.enabled = TRUE WHERE u.id = :id"

@@ -43,6 +43,14 @@ ALTER TABLE IF EXISTS s_forum.t_forum DROP CONSTRAINT IF EXISTS t_forum_inserted
 
 DROP TABLE IF EXISTS s_forum.t_forum;
 
+-- s_forum.t_refresh_token foreign keys rollback
+
+ALTER TABLE IF EXISTS s_forum.t_refresh_token DROP CONSTRAINT IF EXISTS t_refresh_token_inserted_by_fk;
+
+-- s_forum.t_refresh_token definition rollback
+
+DROP TABLE IF EXISTS s_forum.t_refresh_token;
+
 -- s_forum.t_verification_token foreign keys rollback
 
 ALTER TABLE IF EXISTS s_forum.t_verification_token DROP CONSTRAINT IF EXISTS t_verification_token_inserted_by_fk;

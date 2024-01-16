@@ -3,6 +3,7 @@ package dev.codex.web.persistence;
 public class PersistenceConstants {
     public static final String USER_ENTITY_NAME = "UserEntity";
     public static final String VERIFICATION_TOKEN_ENTITY_NAME = "VerificationTokenEntity";
+    public static final String REFRESH_TOKEN_ENTITY_NAME = "RefreshTokenEntity";
     public static final String FORUM_ENTITY_NAME = "ForumEntity";
     public static final String POST_ENTITY_NAME = "PostEntity";
     public static final String POST_DESCRIPTION_ENTITY_NAME = "PostDescriptionEntity";
@@ -17,6 +18,7 @@ public class PersistenceConstants {
 
     public static final String USER_TABLE_NAME = "t_user";
     public static final String VERIFICATION_TOKEN_TABLE_NAME = "t_verification_token";
+    public static final String REFRESH_TOKEN_TABLE_NAME = "t_refresh_token";
     public static final String FORUM_TABLE_NAME = "t_forum";
     public static final String POST_TABLE_NAME = "t_post";
     public static final String POST_DESCRIPTION_TABLE_NAME = "t_post_description";
@@ -25,6 +27,7 @@ public class PersistenceConstants {
 
     public static final String USER_REPOSITORY_BEAN_NAME = "dev.codex.web.persistence.repository.UserRepository";
     public static final String VERIFICATION_TOKEN_REPOSITORY_BEAN_NAME = "dev.codex.web.persistence.repository.VerificationTokenRepository";
+    public static final String REFRESH_TOKEN_REPOSITORY_BEAN_NAME = "dev.codex.web.persistence.repository.RefreshTokenRepository";
     public static final String FORUM_REPOSITORY_BEAN_NAME = "dev.codex.web.persistence.repository.ForumRepository";
     public static final String POST_REPOSITORY_BEAN_NAME = "dev.codex.web.persistence.repository.PostRepository";
     public static final String POST_DESCRIPTION_REPOSITORY_BEAN_NAME = "dev.codex.web.persistence.repository.PostDescriptionRepository";

@@ -10,7 +10,6 @@ import dev.codex.web.persistence.entity.ForumEntity;
 import dev.codex.web.persistence.entity.PostEntity;
 import dev.codex.web.persistence.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,9 +35,7 @@ public class PostService {
 
     @Transactional
     public PostModelData save(PostModelData data) {
-        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long userId = this.userService.loadIdByUsername(username);
-        return Strings.hasText(data.getDescription()) ? this.saveWithDescription(data, userId) : this.save(data, userId);
+        return Strings.hasText(data.getDescription()) ? this.saveWithDescription(data, this.userService.loadCurrentUser().getId()) : this.save(data, this.userService.loadCurrentUser().getId());
     }
 
     @Transactional

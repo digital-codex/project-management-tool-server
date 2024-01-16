@@ -8,7 +8,6 @@ import dev.codex.web.application.exception.ProcessingException;
 import dev.codex.web.persistence.entity.CommentEntity;
 import dev.codex.web.persistence.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,23 +29,20 @@ public class CommentService {
 
     @Transactional
     public CommentModelData save(CommentModelData data, String postUrl) {
-        String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long userId = this.userService.loadIdByUsername(username);
-        return this.save(data, userId, postUrl);
+        return this.save(data, this.userService.loadCurrentUser(), postUrl);
     }
 
     @Transactional
-    public CommentModelData save(CommentModelData data, Long userId, String postUrl) {
+    public CommentModelData save(CommentModelData data, UserModelData user, String postUrl) {
         if (data.getPostId() == null)
             throw new ProcessingException(ProcessingException.NULL_POINTER_EXCEPTION_MSG_FORMAT.formatted("postId"));
 
-        UserModelData user = this.userService.loadById(userId);
         CommentModelData persisted = this.map(
                 this.repository.save(
                         CommentEntity.builder()
                                 .postId(data.getPostId())
                                 .description(data.getDescription())
-                                .insertedBy(userId)
+                                .insertedBy(user.getId())
                                 .insertedAt(Instant.now())
                                 .build()
                 )

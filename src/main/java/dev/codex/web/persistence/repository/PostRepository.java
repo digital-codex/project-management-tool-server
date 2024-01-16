@@ -14,7 +14,7 @@ public interface PostRepository extends JpaRepository<PostEntity, Long> {
      List<PostEntity> findAllByForumId(Long forumId);
 
      @Query(
-             value = "SELECT p FROM PostEntity p JOIN UserEntity u ON p.insertedBy = u.id WHERE u.username = :username"
+             "SELECT p FROM PostEntity p JOIN UserEntity u ON p.insertedBy = u.id WHERE u.username = :username"
      )
      List<PostEntity> findAllByUserEntityUsername(@Param("username") String username);
 

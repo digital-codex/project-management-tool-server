@@ -10,6 +10,7 @@ public class ApplicationConstants {
     public static final String AUTHENTICATION_SERVICE_BEAN_NAME = "dev.codex.web.application.service.AuthenticationService";
     public static final String USER_SERVICE_BEAN_NAME = "dev.codex.web.application.service.UserService";
     public static final String VERIFICATION_TOKEN_SERVICE_BEAN_NAME = "dev.codex.web.application.service.VerificationTokenService";
+    public static final String REFRESH_TOKEN_SERVICE_BEAN_NAME = "dev.codex.web.application.service.RefreshTokenService";
     public static final String MAIL_SERVICE_BEAN_NAME = "dev.codex.web.application.service.MailService";
     public static final String FORUM_SERVICE_BEAN_NAME = "dev.codex.web.application.service.ForumService";
     public static final String POST_SERVICE_BEAN_NAME = "dev.codex.web.application.service.PostService";
