@@ -12,8 +12,6 @@ import java.util.Optional;
 
 @Repository(PersistenceConstants.POST_REPOSITORY_BEAN_NAME)
 public interface PostRepository extends JpaRepository<PostEntity, Long> {
-     Optional<PostEntity> findByUrl(String url);
-
      List<PostEntity> findAllByForumId(Long forumId);
 
      @Query(
