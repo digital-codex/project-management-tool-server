@@ -1,10 +1,16 @@
 package dev.codex.web.application.data;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.util.Objects;
 
 public final class CommentModelData {
+
+    @Schema(name = "id", description = "The identifier of this Comment", example = "1")
     private Long id;
+    @Schema(name = "postId", description = "The identifier of the Post this Comment belongs to", example = "1")
     private Long postId;
+    @Schema(name = "description", description = "The body of this Comment", example = "Test Description")
     private String description;
 
     public CommentModelData() {

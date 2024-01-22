@@ -3,6 +3,11 @@ package dev.codex.web.presentation.controller;
 import dev.codex.web.application.data.VoteModelData;
 import dev.codex.web.application.service.PostService;
 import dev.codex.web.presentation.PresentationConstants;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +26,12 @@ public class VoteController {
         this.postService = postService;
     }
 
+    @Operation(summary = "Create a new Vote")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "201", description = "Vote successfully created", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = VoteModelData.class))}),
+            }
+    )
     @PostMapping
     public ResponseEntity<VoteModelData> create(@RequestBody VoteModelData request) {
         return new ResponseEntity<>(this.postService.checkAndSaveVote(request), HttpStatus.CREATED);

@@ -19,10 +19,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component(PresentationConstants.JWT_AUTHENTICATION_FILTER_BEAN_NAME)
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
-    private final RequestMatcher permitted = new AntPathRequestMatcher(PresentationConstants.AUTHENTICATION_REQUEST_PATH + "/**");
+    private final List<RequestMatcher> permitted = List.of(
+            new AntPathRequestMatcher(PresentationConstants.AUTHENTICATION_REQUEST_PATH + "/**"),
+            new AntPathRequestMatcher(PresentationConstants.FORUM_REQUEST_PATH)
+    );
 
     private final JWTProvider jwtProvider;
     private final UserDetailsService userDetailsService;
@@ -51,7 +55,12 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     public boolean shouldNotFilter(HttpServletRequest request) {
-        return this.permitted.matches(request);
+        System.out.println(request.getRequestURI());
+        for (RequestMatcher matcher : this.permitted) {
+            if (matcher.matches(request))
+                return true;
+        }
+        return false;
     }
 
     private String extractJWT(HttpServletRequest request) {

@@ -1,11 +1,17 @@
 package dev.codex.web.application.data;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.util.Objects;
 
 public final class ForumModelData {
+    @Schema(name = "id", description = "The identifier of this Forum", example = "1")
     private Long id;
+    @Schema(name = "name", description = "The name of this Forum", example = "/test-forum")
     private String name;
+    @Schema(name = "description", description = "The description of this Forum", example = "Test Description")
     private String description;
+    @Schema(name = "postCount", description = "The number of posts this Forum currently has", example = "0")
     private int postCount;
 
     public ForumModelData() {
@@ -35,6 +41,8 @@ public final class ForumModelData {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @SuppressWarnings("unused")
     public int getPostCount() {
         return this.postCount;
     }

@@ -1,14 +1,23 @@
 package dev.codex.web.application.data;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.util.Objects;
 
 public final class PostModelData {
+    @Schema(name = "id", description = "The identifier of this Post", example = "1")
     private Long id;
+    @Schema(name = "forumId", description = "The identifier of the Forum this Post belongs to", example = "1")
     private Long forumId;
+    @Schema(name = "title", description = "The title of this Post", example = "Test Title")
     private String title;
+    @Schema(name = "url", description = "The API endpoint to access this Post", example = "https://localhost:8080/api/posts/420")
     private String url;
+    @Schema(name = "description", description = "The body of this Post", example = "Test Description")
     private String description;
+    @Schema(name = "voteCount", description = "The current accumulated number of UP_VOTEs and DOWN_VOTEs for this Post", example = "0")
     private int voteCount;
+    @Schema(name = "commentCount", description = "The number of comments this Post currently has", example = "0")
     private int commentCount;
 
     public PostModelData() {
@@ -55,6 +64,7 @@ public final class PostModelData {
         this.description = description;
     }
 
+    @SuppressWarnings("unused")
     public int getVoteCount() {
         return this.voteCount;
     }
@@ -63,6 +73,7 @@ public final class PostModelData {
         this.voteCount = voteCount;
     }
 
+    @SuppressWarnings("unused")
     public int getCommentCount() {
         return this.commentCount;
     }

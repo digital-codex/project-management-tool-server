@@ -1,10 +1,15 @@
 package dev.codex.web.application.data;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.util.Objects;
 
 public final class VoteModelData {
+    @Schema(name = "id", description = "The identifier of this Vote", example = "1")
     private Long id;
+    @Schema(name = "postId", description = "The identifier of the Post this Vote belongs to", example = "1")
     private Long postId;
+    @Schema(name = "vote", description = "The scalar value of this Vote", allowableValues = {"-1", "1"})
     private int vote;
 
     public VoteModelData() {

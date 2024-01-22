@@ -1,14 +1,23 @@
 package dev.codex.web.application.data;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 import java.util.Objects;
 
 public final class UserModelData {
+    @Schema(name = "id", description = "The identifier of this User", example = "1")
     private Long id;
+    @Schema(name = "username", description = "The username of this User", example = "TestUser")
     private String username;
+    @Schema(name = "password", description = "The password of this User", hidden = true)
     private String password;
+    @Schema(name = "email", description = "The email of this User", example = "TestEmail@testmail.com")
     private String email;
+    @Schema(name = "enabled", description = "The enable status of this User", hidden = true)
     private boolean enabled;
+    @Schema(name = "authenticationToken", description = "The current JWT authentication token of this User")
     private String authenticationToken;
+    @Schema(name = "refreshToken", description = "The current RefreshToken of this User")
     private String refreshToken;
 
     public UserModelData() {
@@ -35,6 +44,7 @@ public final class UserModelData {
         return this.password;
     }
 
+    @SuppressWarnings("unused")
     public void setPassword(String password) {
         this.password = password;
     }
@@ -47,6 +57,7 @@ public final class UserModelData {
         this.email = email;
     }
 
+    @SuppressWarnings("unused")
     public boolean isEnabled() {
         return this.enabled;
     }
@@ -55,6 +66,7 @@ public final class UserModelData {
         this.enabled = enabled;
     }
 
+    @SuppressWarnings("unused")
     public String getAuthenticationToken() {
         return this.authenticationToken;
     }
