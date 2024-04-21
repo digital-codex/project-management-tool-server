@@ -1,0 +1,1 @@
+CREATE SEQUENCE IF NOT EXISTS s_board_id OWNED BY t_board.id;
