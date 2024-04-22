@@ -36,6 +36,8 @@ public class WebSecurityConfiguration {
         http
                 .addFilterBefore(this.jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
+        http.oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer.jwt(jwt -> jwt.decoder()))
+
         return http.build();
     }
 
